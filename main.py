@@ -28,7 +28,7 @@ GRAY = (169, 169, 169)  # Montagnes
 RED = (255, 0, 0)  # Ville 
 
 # Définir les dimensions de la grille
-ROWS, COLS = 4000,4000
+ROWS, COLS = 1000,1000
 TILE_SIZE = WIDTH // COLS
 
 # Fonction pour générer une carte de bruit de Perlin
