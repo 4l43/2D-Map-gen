@@ -3,6 +3,8 @@ import noise
 import numpy as np
 import random
 import math
+# Importer les fonctions du personnage
+import character
 
 # Initialiser Pygame
 pygame.init()
@@ -28,7 +30,7 @@ GRAY = (169, 169, 169)  # Montagnes
 RED = (255, 0, 0)  # Ville 
 
 # Définir les dimensions de la grille
-ROWS, COLS = 1000,1000
+ROWS, COLS = 300,300
 TILE_SIZE = WIDTH // COLS
 
 # Fonction pour générer une carte de bruit de Perlin
@@ -120,9 +122,13 @@ def main():
     clock = pygame.time.Clock()
     run = True
 
+    # Génération de la carte et des emplacements des villes
     noise_map = generate_perlin_noise_map(ROWS, COLS, scale=5, octaves=6, persistence=0.5, lacunarity=2.0)
     terrain_map = classify_terrain(noise_map)
     city_locations = generate_city_locations(terrain_map)
+
+    # Position initiale du personnage
+    character_pos = (ROWS // 2, COLS // 2)
 
     while run:
         clock.tick(30)
@@ -130,11 +136,19 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+        # Mise à jour de la position du personnage en fonction des touches pressées
+        keys_pressed = pygame.key.get_pressed()
+        character_pos = character.update_character(keys_pressed, character_pos, terrain_map, TILE_SIZE)
+
+        # Dessin de la carte et du personnage
         WIN.fill(WHITE)
         draw_map(WIN, terrain_map, city_locations)
+        character.draw_character(WIN, character_pos, TILE_SIZE)
         pygame.display.update()
 
     pygame.quit()
 
+# Exécution de la fonction principale si ce fichier est exécuté directement
 if __name__ == "__main__":
     main()
+
